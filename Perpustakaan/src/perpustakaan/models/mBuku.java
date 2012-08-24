@@ -24,7 +24,17 @@ public class mBuku extends cDatabaseAction{
     private int _tahunTerbit = 0;
     private String _isbn = null;
     private int _jmlHalaman = 0;
+    private int _nilaiSewa = 0;
     private EnumBukuStatus _status = null;
+    
+    
+    public int getNilaiSewa() {
+        return _nilaiSewa;
+    }
+
+    public void setNilaiSewa(int nilaiSewa) {
+        this._nilaiSewa = nilaiSewa;
+    }
     
     public EnumBukuStatus getStatus() {
         return _status;
