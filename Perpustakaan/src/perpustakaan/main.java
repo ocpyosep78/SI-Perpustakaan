@@ -1,10 +1,12 @@
 package perpustakaan;
 
 import perpustakaan.controllers.database.cDatabaseConnection;
+import perpustakaan.viewer.jFrmLogin;
+import perpustakaan.viewer.jFrmMain;
 
 /**
  *
- * @author ophicxs
+ * @author ophicxs 
  */
 public class main {
     public static String username = null;
@@ -17,7 +19,7 @@ public class main {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jFrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
     
@@ -30,7 +32,7 @@ public class main {
         db.setDbPassword("96099e22672004ef611250d9892c6047");
         System.out.println(db.Open());
         
-//        jFrmMain fMain = new jFrmMain();
-//        fMain.setVisible(true);
+        jFrmMain fMain = new jFrmMain();
+        fMain.setVisible(true);
     }
 }

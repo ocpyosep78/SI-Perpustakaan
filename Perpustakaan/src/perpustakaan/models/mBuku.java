@@ -112,26 +112,29 @@ public class mBuku extends cDatabaseAction{
             String query = "INSERT INTO buku (id, judul, pengarang, penerbit, tahun_terbit, isbn, jml_halaman) "
                          + "     VALUES (?, ?, ?, ?, ?, ?, ?) "
                          + "ON DUPLICATE KEY UPDATE "
-                         + "    judul = ?"
-                         + "    pengarang = ?"
-                         + "    penerbit = ?" 
-                         + "    tahun_terbit = ?" 
-                         + "    isbn = ?"
+                         + "    judul = ?,"
+                         + "    pengarang = ?,"
+                         + "    penerbit = ?," 
+                         + "    tahun_terbit = ?," 
+                         + "    isbn = ?,"
                          + "    jml_halaman = ?";
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
             command.setString(1, this.getId());
+            System.out.println(this.getId());
             command.setString(2, this.getJudul());
+            System.out.println(this.getJudul());
             command.setString(3, this.getPengarang());
             command.setString(4, this.getPenerbit());
-            command.setString(5, this.getPenerbit());
+            command.setInt(5, this.getTahunTerbit());
             command.setString(6, this.getIsbn());
             command.setInt(7, this.getJmlHalaman());
             
             command.setString(8, this.getJudul());
             command.setString(9, this.getPengarang());
             command.setString(10, this.getPenerbit());
-            command.setString(11, this.getIsbn());
-            command.setInt(12, this.getJmlHalaman());
+            command.setInt(11, this.getTahunTerbit());
+            command.setString(12, this.getIsbn());
+            command.setInt(13, this.getJmlHalaman());
             
             result = command;
         } catch (SQLException ex) {
@@ -157,13 +160,13 @@ public class mBuku extends cDatabaseAction{
     
     @Override
     protected List FillFromDatabase(ResultSet rows){
-        List CollectionOfBuku = new ArrayList();
-        mBuku buku = null;
+        List<mBuku> CollectionOfBuku = new ArrayList<mBuku>();
+        mBuku buku;
         
         try {
             while (rows.next()){
                 buku = new mBuku();
-                System.out.println(EnumBukuStatus.values()[rows.getInt("status")]);
+                
                 buku.setId(rows.getString("id"));
                 buku.setJudul(rows.getString("judul"));
                 buku.setPenerbit(rows.getString("penerbit"));
@@ -174,15 +177,9 @@ public class mBuku extends cDatabaseAction{
                 buku.setStatus(EnumBukuStatus.values()[rows.getInt("status")]);
                 CollectionOfBuku.add(buku);
             }
-            System.out.println("tes");
         } catch (SQLException ex) {
             Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
         }
         return CollectionOfBuku;
-    }
-    
-    @Override
-    protected Object CurrentClass(){
-        return this;
     }
 }

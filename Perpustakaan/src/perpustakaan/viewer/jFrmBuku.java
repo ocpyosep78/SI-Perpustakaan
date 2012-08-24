@@ -1,7 +1,8 @@
-package perpustakaan.controllers;
+package perpustakaan.viewer;
 
 import java.util.List;
 import java.util.ListIterator;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -13,32 +14,39 @@ import perpustakaan.models.mBuku;
  * @author ophicxs
  */
 public class jFrmBuku extends javax.swing.JInternalFrame {
+    private mBuku _buku = new mBuku();
+    private boolean _isNew = false;
+    
     public jFrmBuku() {
-        initComponents();
-        cUtils.TabCreateColumn(jTabBuku, new String[]{"Kode Buku", 
-                                                      "Judul Buku", 
-                                                      "Penerbit", 
-                                                      "Pengarang", 
-                                                      "Tahun Terbit", 
-                                                      "Tebal", 
-                                                      "ISBN", 
-                                                      "Status"});
+        this.initComponents();
+        String[] column = new String[]{"Kode Buku", 
+                                       "Judul Buku", 
+                                       "Penerbit", 
+                                       "Pengarang", 
+                                       "Tahun Terbit", 
+                                       "Tebal", 
+                                       "ISBN", 
+                                       "Status"};
+        cUtils.TabCreateColumn(jTabBuku, column);
+        this.LoadRows();
         jTabBuku.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (jTabBuku.getSelectedRow() > 0){
-                    int selectedRow = jTabBuku.convertColumnIndexToModel(jTabBuku.getSelectedRow());
-                    txtId.setText(jTabBuku.getModel().getValueAt(selectedRow, 0).toString());
-                    txtJudul.setText(jTabBuku.getModel().getValueAt(selectedRow, 1).toString());
-                    txtPenerbit.setText(jTabBuku.getModel().getValueAt(selectedRow, 2).toString());
-                    txtPengarang.setText(jTabBuku.getModel().getValueAt(selectedRow, 3).toString());
-                    txtTahunTerbit.setText(jTabBuku.getModel().getValueAt(selectedRow, 4).toString());
-                    txtIsbn.setText(jTabBuku.getModel().getValueAt(selectedRow, 5).toString());
-                    lblStatus.setText(jTabBuku.getModel().getValueAt(selectedRow, 6).toString());
-                }
+                int selectedRow =  jTabBuku.convertRowIndexToModel(jTabBuku.getSelectedRow());
+                
+                if (selectedRow >= 0){
+                    txtId.setText((String) jTabBuku.getValueAt(selectedRow, 0));
+                    txtJudul.setText((String) jTabBuku.getValueAt(selectedRow, 1));
+                    txtPenerbit.setText((String) jTabBuku.getValueAt(selectedRow, 2));
+                    txtPengarang.setText((String) jTabBuku.getValueAt(selectedRow, 3));
+                    txtTahunTerbit.setText(jTabBuku.getValueAt(selectedRow, 4).toString());
+                    txtIsbn.setText((String) jTabBuku.getValueAt(selectedRow, 6));
+                    lblStatus.setText("Status: "+ jTabBuku.getValueAt(selectedRow, 7).toString());
+                } else {
+                    cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                }        
             }
-        });      
-        LoadRows();
+        });
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -58,9 +66,9 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         txtTahunTerbit = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabBuku = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
 
         setClosable(true);
@@ -69,9 +77,17 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Kode Buku");
 
+        txtId.setEnabled(false);
+
+        txtJudul.setEnabled(false);
+
         jLabel2.setText("Judul Buku");
 
+        txtPengarang.setEnabled(false);
+
         jLabel3.setText("Pengarang");
+
+        txtPenerbit.setEnabled(false);
 
         jLabel4.setText("Penerbit");
 
@@ -79,7 +95,10 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
 
         jLabel6.setText("ISBN");
 
+        txtIsbn.setEnabled(false);
+
         txtTahunTerbit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy"))));
+        txtTahunTerbit.setEnabled(false);
 
         jTabBuku.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,12 +109,28 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane1.setViewportView(jTabBuku);
+        jTabBuku.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        jButton1.setText("Delete");
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Edit");
+        btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Add");
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         lblStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblStatus.setText("Status : Ada");
@@ -110,11 +145,11 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(btnAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnEdit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addComponent(btnDelete))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -167,15 +202,91 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDelete)
+                    .addComponent(btnEdit)
+                    .addComponent(btnAdd))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        switch (btnAdd.getText()){
+                case "Add":
+                    _isNew = true;
+                    cUtils.StateObjInput(true, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    lblStatus.setText("Status: Kosong");
+                    cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, true);
+                    break;
+                case "Save":
+                    if (SaveRow()){
+                        cUtils.StateObjInput(false, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                        cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, false);
+                    }
+                    break;
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        switch (btnEdit.getText()){
+                case "Edit":
+                    _isNew = false;
+                    cUtils.StateObjInput(true, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, true);
+                    break;
+                case "Cancel":
+                    if (_isNew){ cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit}); }
+                    cUtils.StateObjInput(false, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, false);
+                    break;
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int result = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.YES_OPTION) {
+            this.CopyObjectToModel();
+            _buku.EraseRow();
+            DefaultTableModel tblModel = (DefaultTableModel) jTabBuku.getModel();
+            tblModel.removeRow(jTabBuku.convertColumnIndexToModel(jTabBuku.getSelectedRow()));
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private boolean SaveRow(){
+        boolean result = false;
+        
+        this.CopyObjectToModel();
+        if (_buku.MergeRow()){
+            DefaultTableModel tblModel = (DefaultTableModel) jTabBuku.getModel();
+            if (_isNew){
+                tblModel.addRow(new Object[]{_buku.getId(),
+                                             _buku.getJudul(),
+                                             _buku.getPenerbit(),
+                                             _buku.getPengarang(), 
+                                             _buku.getTahunTerbit(), 
+                                             _buku.getJmlHalaman(), 
+                                             _buku.getIsbn(), 
+                                             _buku.getStatus()});
+                cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+            } else {
+                int rowPosition = jTabBuku.convertRowIndexToModel(jTabBuku.getSelectedRow());
+                tblModel.setValueAt(_buku.getId(), rowPosition, 0);
+                tblModel.setValueAt(_buku.getJudul(), rowPosition, 1);
+                tblModel.setValueAt(_buku.getPenerbit(), rowPosition, 2);
+                tblModel.setValueAt(_buku.getPengarang(), rowPosition, 3);
+                tblModel.setValueAt(_buku.getTahunTerbit(), rowPosition, 4);
+                tblModel.setValueAt(_buku.getJmlHalaman(), rowPosition, 5);
+                tblModel.setValueAt(_buku.getIsbn(), rowPosition, 6);
+                tblModel.setValueAt(_buku.getStatus(), rowPosition, 7);
+            }
+            result = true;
+        }
+        return result;
+    }
+    
     private void LoadRows(){
         mBuku buku = new mBuku();
         List CollectionOfBuku = buku.FetchRows();
@@ -194,14 +305,21 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         }
     }
     
-    private void InsertData(){
-        
+    private void CopyObjectToModel(){
+        _buku.setId(txtId.getText());
+        _buku.setJudul(txtJudul.getText());
+        _buku.setPenerbit(txtPenerbit.getText());
+        _buku.setPengarang(txtPengarang.getText());
+        _buku.setTahunTerbit(Integer.parseInt(txtTahunTerbit.getText()));
+        _buku.setJmlHalaman(0);
+        _buku.setIsbn(txtIsbn.getText());
+        _buku.setStatus(mBuku.EnumBukuStatus.ada);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
