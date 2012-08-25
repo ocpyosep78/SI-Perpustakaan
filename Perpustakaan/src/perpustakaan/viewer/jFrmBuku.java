@@ -26,6 +26,7 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                                        "Tahun Terbit", 
                                        "Tebal", 
                                        "ISBN", 
+                                       "Harga Sewa",
                                        "Status"};
         cUtils.TabCreateColumn(jTabBuku, column);
         this.LoadRows();
@@ -40,10 +41,12 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                     txtPenerbit.setText((String) jTabBuku.getValueAt(selectedRow, 2));
                     txtPengarang.setText((String) jTabBuku.getValueAt(selectedRow, 3));
                     txtTahunTerbit.setText(jTabBuku.getValueAt(selectedRow, 4).toString());
+                    txtTebal.setText((String) jTabBuku.getValueAt(selectedRow, 5));
                     txtIsbn.setText((String) jTabBuku.getValueAt(selectedRow, 6));
-                    lblStatus.setText("Status: "+ jTabBuku.getValueAt(selectedRow, 7).toString());
+                    txtHrgSewa.setText((String) jTabBuku.getValueAt(selectedRow, 7));
+                    lblStatus.setText("Status: "+ jTabBuku.getValueAt(selectedRow, 8).toString());
                 } else {
-                    cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
                 }        
             }
         });
@@ -70,6 +73,10 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         btnEdit = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtTebal = new javax.swing.JTextField();
+        txtHrgSewa = new javax.swing.JTextField();
 
         setClosable(true);
         setForeground(java.awt.Color.white);
@@ -135,6 +142,16 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         lblStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblStatus.setText("Status : Ada");
 
+        jLabel7.setText("Tebal");
+
+        jLabel8.setText("Harga Sewa");
+
+        txtTebal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtTebal.setEnabled(false);
+
+        txtHrgSewa.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtHrgSewa.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,14 +177,30 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPengarang, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPenerbit, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTahunTerbit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblStatus)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTahunTerbit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblStatus))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtPenerbit, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtHrgSewa, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtPengarang, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtTebal, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(51, 51, 51)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -185,11 +218,15 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtPengarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPengarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtTebal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtPenerbit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPenerbit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtHrgSewa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -215,14 +252,14 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         switch (btnAdd.getText()){
                 case "Add":
                     _isNew = true;
-                    cUtils.StateObjInput(true, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.StateObjInput(true, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
                     lblStatus.setText("Status: Kosong");
-                    cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
                     cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, true);
                     break;
                 case "Save":
-                    if (SaveRow()){
-                        cUtils.StateObjInput(false, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    if (this.SaveRow()){
+                        cUtils.StateObjInput(false, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
                         cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, false);
                     }
                     break;
@@ -233,12 +270,12 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         switch (btnEdit.getText()){
                 case "Edit":
                     _isNew = false;
-                    cUtils.StateObjInput(true, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    cUtils.StateObjInput(true, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
                     cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, true);
                     break;
                 case "Cancel":
-                    if (_isNew){ cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit}); }
-                    cUtils.StateObjInput(false, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                    if (_isNew){ cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa}); }
+                    cUtils.StateObjInput(false, new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
                     cUtils.FlipButtonName(btnAdd, btnEdit, btnDelete, false);
                     break;
         }
@@ -269,8 +306,9 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                                              _buku.getTahunTerbit(), 
                                              _buku.getJmlHalaman(), 
                                              _buku.getIsbn(), 
+                                             _buku.getNilaiSewa(), 
                                              _buku.getStatus()});
-                cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit});
+                cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
             } else {
                 int rowPosition = jTabBuku.convertRowIndexToModel(jTabBuku.getSelectedRow());
                 tblModel.setValueAt(_buku.getId(), rowPosition, 0);
@@ -280,7 +318,8 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                 tblModel.setValueAt(_buku.getTahunTerbit(), rowPosition, 4);
                 tblModel.setValueAt(_buku.getJmlHalaman(), rowPosition, 5);
                 tblModel.setValueAt(_buku.getIsbn(), rowPosition, 6);
-                tblModel.setValueAt(_buku.getStatus(), rowPosition, 7);
+                tblModel.setValueAt(_buku.getNilaiSewa(), rowPosition, 6);
+                tblModel.setValueAt(_buku.getStatus(), rowPosition, 8);
             }
             result = true;
         }
@@ -300,7 +339,9 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                                          item.getPengarang(), 
                                          item.getTahunTerbit(), 
                                          item.getJmlHalaman(), 
+                                         item.getJmlHalaman(),
                                          item.getIsbn(), 
+                                         item.getNilaiSewa(),
                                          item.getStatus()});
         }
     }
@@ -311,7 +352,8 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
         _buku.setPenerbit(txtPenerbit.getText());
         _buku.setPengarang(txtPengarang.getText());
         _buku.setTahunTerbit(Integer.parseInt(txtTahunTerbit.getText()));
-        _buku.setJmlHalaman(0);
+        _buku.setJmlHalaman(Integer.parseInt(txtTebal.getText()));
+        _buku.setNilaiSewa(Integer.parseInt(txtHrgSewa.getText()));
         _buku.setIsbn(txtIsbn.getText());
         _buku.setStatus(mBuku.EnumBukuStatus.ada);
     }
@@ -326,15 +368,19 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTabBuku;
     private javax.swing.JLabel lblStatus;
+    private javax.swing.JTextField txtHrgSewa;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtIsbn;
     private javax.swing.JTextField txtJudul;
     private javax.swing.JTextField txtPenerbit;
     private javax.swing.JTextField txtPengarang;
     private javax.swing.JFormattedTextField txtTahunTerbit;
+    private javax.swing.JTextField txtTebal;
     // End of variables declaration//GEN-END:variables
 
 }

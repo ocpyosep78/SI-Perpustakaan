@@ -20,6 +20,18 @@ abstract public class cDatabaseAction {
     abstract protected PreparedStatement DbCommandFetch();
     abstract protected PreparedStatement DbCommandMerge();
     abstract protected PreparedStatement DbCommandErase();
+    abstract protected PreparedStatement DBCommandFetchSelected(Object criteria);
+    
+    public List<Object> FetchRowSelected(Object criteria){
+        List result = null;
+        try {
+            PreparedStatement command = this.DBCommandFetchSelected(criteria);
+            result = FillFromDatabase(command.executeQuery());
+        } catch (SQLException ex) {
+            Logger.getLogger(cDatabaseAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
     
     public List<Object> FetchRows(){
         List result = null;

@@ -83,7 +83,6 @@ public class mPegawai extends cDatabaseAction {
             String query = "INSERT INTO pegawai (username, password, nama, alamat, kontak) "
                          + "     VALUES (?, MD5(?), ?, ?, ?) "
                          + "ON DUPLICATE KEY UPDATE "
-                         + "    username = ?,"
                          + "    password = MD5(?),"
                          + "    nama = ?," 
                          + "    alamat = ?," 
@@ -95,11 +94,10 @@ public class mPegawai extends cDatabaseAction {
             command.setString(4, this.getAlamat());
             command.setString(5, this.getKontak());
             
-            command.setString(6, this.getUsername());
-            command.setString(7, this.getPassword());
-            command.setString(8, this.getNama());
-            command.setString(9, this.getAlamat());
-            command.setString(10, this.getKontak());
+            command.setString(6, this.getPassword());
+            command.setString(7, this.getNama());
+            command.setString(8, this.getAlamat());
+            command.setString(9, this.getKontak());
             
             result = command;
         } catch (SQLException ex) {
@@ -142,5 +140,21 @@ public class mPegawai extends cDatabaseAction {
             Logger.getLogger(mPegawai.class.getName()).log(Level.SEVERE, null, ex);
         }
         return CollectionOfPegawai;
+    }
+    
+    @Override
+    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+        PreparedStatement result = null;
+        try {
+            String query = "SELECT * "
+                         + "  FROM pegawai "
+                         + "WHERE nama LIKE ?";
+            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setString(1, "%"+((String) criteria)+"%");
+            result = command;
+        } catch (SQLException ex) {
+            Logger.getLogger(mPegawai.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 }

@@ -30,7 +30,6 @@ public class jFrmMain extends JFrame {
         jMnPegawai = new javax.swing.JMenuItem();
         jMnMember = new javax.swing.JMenuItem();
         mnTransaksi = new javax.swing.JMenu();
-        jMnDaftarMember = new javax.swing.JMenuItem();
         jMnuPeminjamanBuku = new javax.swing.JMenuItem();
         jMnPengembalianBuku = new javax.swing.JMenuItem();
         jSep2 = new javax.swing.JPopupMenu.Separator();
@@ -82,6 +81,11 @@ public class jFrmMain extends JFrame {
         mnData.add(jMnPegawai);
 
         jMnMember.setText("Member");
+        jMnMember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnMemberActionPerformed(evt);
+            }
+        });
         mnData.add(jMnMember);
 
         jMnBar.add(mnData);
@@ -89,10 +93,12 @@ public class jFrmMain extends JFrame {
         mnTransaksi.setText("Transaksi");
         mnTransaksi.setEnabled(false);
 
-        jMnDaftarMember.setText("Pendaftaran Member");
-        mnTransaksi.add(jMnDaftarMember);
-
         jMnuPeminjamanBuku.setText("Peminjaman Buku");
+        jMnuPeminjamanBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuPeminjamanBukuActionPerformed(evt);
+            }
+        });
         mnTransaksi.add(jMnuPeminjamanBuku);
 
         jMnPengembalianBuku.setText("Pengembalian Buku");
@@ -159,6 +165,22 @@ public class jFrmMain extends JFrame {
         }
     }//GEN-LAST:event_jMnPegawaiActionPerformed
 
+    private void jMnMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnMemberActionPerformed
+        if (!this.isChildExist(jFrmMember.class.getName())){
+            jFrmMember fMember = new jFrmMember();
+            jDeskPane.add(fMember);
+            fMember.setVisible(true);
+        }
+    }//GEN-LAST:event_jMnMemberActionPerformed
+
+    private void jMnuPeminjamanBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuPeminjamanBukuActionPerformed
+        if (!this.isChildExist(jFrmPinjam.class.getName())){
+            jFrmPinjam fPinjam = new jFrmPinjam();
+            jDeskPane.add(fPinjam);
+            fPinjam.setVisible(true);
+        }
+    }//GEN-LAST:event_jMnuPeminjamanBukuActionPerformed
+
     private void closeAllChild(){
         for (int i = 0; i < jDeskPane.getAllFrames().length; i++){
             jDeskPane.getAllFrames()[i].dispose();
@@ -188,7 +210,6 @@ public class jFrmMain extends JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMnBar;
     private javax.swing.JMenuItem jMnBuku;
-    private javax.swing.JMenuItem jMnDaftarMember;
     private javax.swing.JMenuItem jMnKeluar;
     private javax.swing.JMenuItem jMnLogin;
     private javax.swing.JMenuItem jMnMember;

@@ -119,33 +119,33 @@ public class mBuku extends cDatabaseAction{
     protected PreparedStatement DbCommandMerge(){
         PreparedStatement result = null;
         try {
-            String query = "INSERT INTO buku (id, judul, pengarang, penerbit, tahun_terbit, isbn, jml_halaman) "
-                         + "     VALUES (?, ?, ?, ?, ?, ?, ?) "
+            String query = "INSERT INTO buku (id, judul, pengarang, penerbit, tahun_terbit, isbn, jml_halaman, hrg_sewa) "
+                         + "     VALUES (?, ?, ?, ?, ?, ?, ?, ?) "
                          + "ON DUPLICATE KEY UPDATE "
                          + "    judul = ?,"
                          + "    pengarang = ?,"
                          + "    penerbit = ?," 
                          + "    tahun_terbit = ?," 
                          + "    isbn = ?,"
-                         + "    jml_halaman = ?";
+                         + "    jml_halaman = ?, "
+                         + "    hrg_sewa = ?";
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
             command.setString(1, this.getId());
-            System.out.println(this.getId());
             command.setString(2, this.getJudul());
-            System.out.println(this.getJudul());
             command.setString(3, this.getPengarang());
             command.setString(4, this.getPenerbit());
             command.setInt(5, this.getTahunTerbit());
             command.setString(6, this.getIsbn());
             command.setInt(7, this.getJmlHalaman());
+            command.setInt(8, this.getNilaiSewa());
             
-            command.setString(8, this.getJudul());
-            command.setString(9, this.getPengarang());
-            command.setString(10, this.getPenerbit());
-            command.setInt(11, this.getTahunTerbit());
-            command.setString(12, this.getIsbn());
-            command.setInt(13, this.getJmlHalaman());
-            
+            command.setString(9, this.getJudul());
+            command.setString(10, this.getPengarang());
+            command.setString(11, this.getPenerbit());
+            command.setInt(12, this.getTahunTerbit());
+            command.setString(13, this.getIsbn());
+            command.setInt(14, this.getJmlHalaman());
+            command.setInt(15, this.getNilaiSewa());
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
@@ -185,11 +185,29 @@ public class mBuku extends cDatabaseAction{
                 buku.setIsbn(rows.getString("isbn"));
                 buku.setJmlHalaman(rows.getInt("jml_halaman"));
                 buku.setStatus(EnumBukuStatus.values()[rows.getInt("status")]);
+                buku.setNilaiSewa(rows.getInt("hrg_sewa"));
                 CollectionOfBuku.add(buku);
             }
         } catch (SQLException ex) {
             Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
         }
         return CollectionOfBuku;
+    }
+    
+    @Override
+    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+        PreparedStatement result = null;
+        try {
+            String query = "SELECT * "
+                         + "  FROM buku "
+                         + "WHERE judul LIKE ?";
+            
+            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setString(1, "%"+((String) criteria)+"%");
+            result = command;
+        } catch (SQLException ex) {
+            Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 }

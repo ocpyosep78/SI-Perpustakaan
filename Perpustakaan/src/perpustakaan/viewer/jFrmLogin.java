@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import perpustakaan.controllers.database.cDatabaseConnection;
+import perpustakaan.main;
 import perpustakaan.models.mBuku;
 
 /**
@@ -114,6 +115,7 @@ public class jFrmLogin extends javax.swing.JInternalFrame {
             while(result.next()){
                 System.out.println(result.getString("result"));
                 isCorrect = (result.getInt("result") != 0);
+                main.username = username;
             }
         } catch (SQLException ex) {
             Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
