@@ -15,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import perpustakaan.controllers.utils.cUtils;
 import perpustakaan.main;
+import perpustakaan.models.mBuku;
+import perpustakaan.models.mMember;
 import perpustakaan.models.mTransaksi;
 import perpustakaan.models.mTransaksiDetil;
 import perpustakaan.viewer.pop.jFrmPopBuku;
@@ -37,6 +39,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if (txtNoPinjam.getText().length() > 0) {
+                    getMember(txtIdMember.getText());
                     getDetilTrx(Integer.parseInt(txtNoPinjam.getText()));
                 }
                 System.out.println(txtNoPinjam.getText());
@@ -45,6 +48,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (txtNoPinjam.getText().length() > 0) {
+                    getMember(txtIdMember.getText());
                     getDetilTrx(Integer.parseInt(txtNoPinjam.getText()));
                 }
                 System.out.println(txtNoPinjam.getText());
@@ -53,6 +57,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 if (txtNoPinjam.getText().length() > 0) {
+                    getMember(txtIdMember.getText());
                     getDetilTrx(Integer.parseInt(txtNoPinjam.getText()));
                 }
                 System.out.println(txtNoPinjam.getText());
@@ -374,6 +379,8 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
                 
                 txtNoPinjam.setText(String.valueOf(_trx.GetNewTrxId()));
                 txtTglPinjam.setText(skg.toString());
+                txtTglBatas.setText(skg.toString());
+                getDetilTrx(Integer.parseInt(txtNoPinjam.getText()));
                 break;
             case "Save":
                 if (this.SaveRow()) {
@@ -402,7 +409,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnBrowseNoPinjamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseNoPinjamActionPerformed
-        jFrmPopPeminjaman fPop = new jFrmPopPeminjaman(txtNoPinjam, txtTglPinjam, txtTglBatas);
+        jFrmPopPeminjaman fPop = new jFrmPopPeminjaman(txtNoPinjam, txtTglPinjam, txtTglBatas, txtIdMember);
         fPop.setVisible(true);
     }//GEN-LAST:event_btnBrowseNoPinjamActionPerformed
 
@@ -429,7 +436,14 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
 
     private void btnRemoveListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveListActionPerformed
         if (jTabDetil.getSelectedRow() > -1){
+            mTransaksiDetil trxDetil = new mTransaksiDetil(Integer.parseInt(txtNoPinjam.getText()));
+            
             DefaultTableModel tblModel = (DefaultTableModel) jTabDetil.getModel();
+            trxDetil.setIdBuku(tblModel.getValueAt(jTabDetil.getSelectedRow(), 0).toString());
+            
+            trxDetil.UpdateBukuStatus(0);
+            trxDetil.EraseRow();
+            
             tblModel.removeRow(jTabDetil.getSelectedRow());
             IncreaseDate(jTabDetil.getRowCount());
         }
@@ -494,16 +508,27 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
                 TableModel tblModel = jTabDetil.getModel();
                 trxDet.setIdBuku((String) tblModel.getValueAt(i, 0));
                 trxDet.setJudulBuku((String) tblModel.getValueAt(i, 1));
-                trxDet.setNilaiSewa((int) tblModel.getValueAt(i, 2));
+                trxDet.setNilaiSewa(Integer.parseInt(tblModel.getValueAt(i, 2).toString()));
                 trxDet.MergeRow();
+                trxDet.UpdateBukuStatus(1);
             }
+            result = true;
         }
         return result;
     }
     
+    private void getMember(String idMember){
+        mMember member = new mMember();
+        
+        member.setId(idMember);
+        member.setNamaById();
+        System.out.println(member.getNama());
+        txtNamaMember.setText(member.getNama());
+    }
+    
     private void getDetilTrx(int noPinjam) {
         mTransaksiDetil trxDet = new mTransaksiDetil(noPinjam);
-        List CollectionOfTrxDet = trxDet.FetchRows();
+        List CollectionOfTrxDet = trxDet.FetchRowSelected(noPinjam);
         ListIterator lst = CollectionOfTrxDet.listIterator();
         DefaultTableModel tblModel = (DefaultTableModel) jTabDetil.getModel();
         cUtils.ResetTableContent(tblModel);

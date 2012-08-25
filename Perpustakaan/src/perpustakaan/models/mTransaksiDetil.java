@@ -52,6 +52,18 @@ public class mTransaksiDetil extends cDatabaseAction {
         this._nilaiSewa = nilaiSewa;
     }
 
+    public void UpdateBukuStatus(int Status){
+        try {
+            String query = "UPDATE buku SET `status` = ? WHERE id = ?;";
+            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setInt(1, Status);
+            command.setString(2, this._idBuku);
+            command.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @Override
     protected List FillFromDatabase(ResultSet rows) {
         List<mTransaksiDetil> CollectionOfTrxDetil = new ArrayList<mTransaksiDetil>();
@@ -62,6 +74,7 @@ public class mTransaksiDetil extends cDatabaseAction {
                 trxDetil = new mTransaksiDetil(getNoPeminjaman());
                 
                 trxDetil.setIdBuku(rows.getString("id_buku"));
+                trxDetil.setJudulBuku(rows.getString("judul"));
                 trxDetil.setNilaiSewa(rows.getInt("nilai_sewa"));
                 
                 CollectionOfTrxDetil.add(trxDetil);
@@ -76,9 +89,9 @@ public class mTransaksiDetil extends cDatabaseAction {
     protected PreparedStatement DbCommandFetch() {
         PreparedStatement result = null;
         try {
-            String query = "SELECT * "
-                         + "  FROM detil_transaksi ";
-            
+            String query = "SELECT detil_transaksi.*, buku.judul "
+                         + "  FROM detil_transaksi "
+                         + "INNER JOIN buku ON detil_transaksi.id_buku = buku.id";
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
             result = command;
         } catch (SQLException ex) {
@@ -103,7 +116,7 @@ public class mTransaksiDetil extends cDatabaseAction {
 
             command.setString(4, this.getIdBuku());
             command.setInt(5, this.getNilaiSewa());
-
+            
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,9 +129,10 @@ public class mTransaksiDetil extends cDatabaseAction {
         PreparedStatement result = null;
         try {
             String query = "DELETE FROM detil_transaksi "
-                         + "WHERE detil_transaksi.no_peminjaman = ?";
+                         + "WHERE detil_transaksi.no_peminjaman = ? AND detil_transaksi.id_buku = ?; ";
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setInt(1, this.getNoPeminjaman());
+            command.setInt(1, this._noPeminjaman);
+            command.setString(2, this._idBuku);
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,12 +145,13 @@ public class mTransaksiDetil extends cDatabaseAction {
     protected PreparedStatement DBCommandFetchSelected(Object criteria) {
         PreparedStatement result = null;
         try {
-            String query = "SELECT * "
-                         + "  FROM detil_transaksi "
-                         + "WHERE no_peminjaman = ?";
+            String query = "SELECT detil_transaksi.*, buku.judul "
+                         + "  FROM detil_transaksi INNER JOIN buku ON detil_transaksi.id_buku = buku.id "
+                         + "WHERE detil_transaksi.no_peminjaman = ?";
             
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setString(1, ((String) criteria));
+            command.setInt(1, Integer.parseInt(criteria.toString()));
+            
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);

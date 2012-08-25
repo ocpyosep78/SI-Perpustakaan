@@ -41,9 +41,9 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                     txtPenerbit.setText((String) jTabBuku.getValueAt(selectedRow, 2));
                     txtPengarang.setText((String) jTabBuku.getValueAt(selectedRow, 3));
                     txtTahunTerbit.setText(jTabBuku.getValueAt(selectedRow, 4).toString());
-                    txtTebal.setText((String) jTabBuku.getValueAt(selectedRow, 5));
-                    txtIsbn.setText((String) jTabBuku.getValueAt(selectedRow, 6));
-                    txtHrgSewa.setText((String) jTabBuku.getValueAt(selectedRow, 7));
+                    txtTebal.setText(jTabBuku.getValueAt(selectedRow, 5).toString());
+                    txtIsbn.setText(String.valueOf(jTabBuku.getValueAt(selectedRow, 6)));
+                    txtHrgSewa.setText(String.valueOf(jTabBuku.getValueAt(selectedRow, 7)));
                     lblStatus.setText("Status: "+ jTabBuku.getValueAt(selectedRow, 8).toString());
                 } else {
                     cUtils.ClearObjInput(new Object[]{txtId, txtJudul, txtIsbn, txtPenerbit, txtPengarang, txtTahunTerbit, txtTebal, txtHrgSewa});
@@ -339,7 +339,6 @@ public class jFrmBuku extends javax.swing.JInternalFrame {
                                          item.getPengarang(), 
                                          item.getTahunTerbit(), 
                                          item.getJmlHalaman(), 
-                                         item.getJmlHalaman(),
                                          item.getIsbn(), 
                                          item.getNilaiSewa(),
                                          item.getStatus()});

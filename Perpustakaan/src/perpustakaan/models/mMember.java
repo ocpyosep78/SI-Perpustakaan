@@ -82,7 +82,26 @@ public class mMember extends cDatabaseAction {
         this._tglDaftar = tglDaftar;
     }
     
-        @Override
+    public void setNamaById(){
+        try {
+            String query = "SELECT * "
+                         + "  FROM member WHERE id = ?";
+            
+            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setString(1, this._id);
+            System.out.println(this._id);
+                    
+            ResultSet rs =  command.executeQuery();
+            while (rs.next()){
+                System.out.print(rs.getString("nama"));
+                this._nama = rs.getString("nama");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(mMember.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
     protected PreparedStatement DbCommandFetch(){
         PreparedStatement result = null;
         try {
@@ -181,7 +200,7 @@ public class mMember extends cDatabaseAction {
                          + "WHERE nama LIKE ?";
             
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setString(1, "%"+((String) criteria)+"%");
+            command.setString(1, "%"+criteria.toString()+"%");
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mMember.class.getName()).log(Level.SEVERE, null, ex);

@@ -125,8 +125,8 @@ public class jFrmPopMember extends javax.swing.JFrame {
     private void jTabResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabResultMouseClicked
         if (evt.getClickCount() == 2){
             int selected = jTabResult.convertRowIndexToModel(jTabResult.getSelectedRow());
-            this._idMember.setText((String) jTabResult.getModel().getValueAt(selected, 1));
-            this._namaMember.setText((String) jTabResult.getModel().getValueAt(selected, 2));
+            this._idMember.setText((String) jTabResult.getModel().getValueAt(selected, 0));
+            this._namaMember.setText((String) jTabResult.getModel().getValueAt(selected, 1));
             this.dispose();
         }
     }//GEN-LAST:event_jTabResultMouseClicked

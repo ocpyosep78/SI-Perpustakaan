@@ -15,11 +15,14 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
     private JTextField _noPinjam = null;
     private JTextField _tglPinjam = null;
     private JTextField _tglBatas = null;
-    
-    public jFrmPopPeminjaman(JTextField noPinjam, JTextField tglPinjam, JTextField tglBatas) {
+    private JTextField _idMember = null; 
+            
+    public jFrmPopPeminjaman(JTextField noPinjam, JTextField tglPinjam, JTextField tglBatas, JTextField idMember) {
         this._noPinjam = noPinjam;
         this._tglPinjam = tglPinjam;
         this._tglBatas = tglBatas;
+        this._idMember = idMember;
+                
         initComponents();
         String[] column = new String[]{"No. Peminjaman", 
                                        "Tgl. Pinjam", 
@@ -32,7 +35,7 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
     
     private void LoadRows(String criteria){
         mTransaksi trx = new mTransaksi();
-        List CollectionOfTrx = trx.FetchRowSelected(criteria);
+        List CollectionOfTrx = trx.FetchRows();
         ListIterator lst = CollectionOfTrx.listIterator();
         DefaultTableModel tblModel = (DefaultTableModel) jTabResult.getModel();
         cUtils.ResetTableContent((DefaultTableModel) jTabResult.getModel());
@@ -122,9 +125,10 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
     private void jTabResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabResultMouseClicked
         if (evt.getClickCount() == 2){
             int selected = jTabResult.convertRowIndexToModel(jTabResult.getSelectedRow());
-            this._noPinjam.setText((String) jTabResult.getModel().getValueAt(selected, 1));
-            this._tglPinjam.setText((String) jTabResult.getModel().getValueAt(selected, 2));
-            this._tglBatas.setText((String) jTabResult.getModel().getValueAt(selected, 3));
+            this._idMember.setText(jTabResult.getModel().getValueAt(selected, 3).toString());
+            this._noPinjam.setText(jTabResult.getModel().getValueAt(selected, 0).toString());
+            this._tglPinjam.setText(jTabResult.getModel().getValueAt(selected, 1).toString());
+            this._tglBatas.setText(jTabResult.getModel().getValueAt(selected, 2).toString());
             this.dispose();
         }
     }//GEN-LAST:event_jTabResultMouseClicked
