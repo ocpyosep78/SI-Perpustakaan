@@ -16,7 +16,8 @@ import perpustakaan.controllers.database.cDatabaseConnection;
  */
 public class mBuku extends cDatabaseAction{
     public enum EnumBukuStatus { ada, keluar }
-    
+    private EnumBukuStatus _filterStatus = null;
+    private String _filterJudul;
     private String _id = null;
     private String _judul = null;
     private String _pengarang = null;
@@ -98,6 +99,15 @@ public class mBuku extends cDatabaseAction{
 
     public void setIsbn(String isbn) {
         this._isbn = isbn;
+        
+    }
+    
+    public void setFilterStatus(EnumBukuStatus filterStatus) {
+        this._filterStatus = filterStatus;
+    }
+    
+    public void setFilterByJudul(String judul){
+        this._filterJudul = judul;
     }
     
     @Override
@@ -105,9 +115,15 @@ public class mBuku extends cDatabaseAction{
         PreparedStatement result = null;
         try {
             String query = "SELECT * "
-                         + "  FROM buku ";
+                         + "  FROM buku "
+                         + "WHERE status LIKE ? AND "
+                         + "      judul LIKE ? ";
             
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            String state = (this._filterStatus == null) ? "" : String.valueOf(this._filterStatus.ordinal()) ;
+            String judul = (this._filterJudul == null) ? "" : this._filterJudul;
+            command.setString(1, "%"+state+"%");
+            command.setString(2, "%"+judul+"%");
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
@@ -194,20 +210,20 @@ public class mBuku extends cDatabaseAction{
         return CollectionOfBuku;
     }
     
-    @Override
-    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
-        PreparedStatement result = null;
-        try {
-            String query = "SELECT * "
-                         + "  FROM buku "
-                         + "WHERE judul LIKE ?";
-            
-            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setString(1, "%"+((String) criteria)+"%");
-            result = command;
-        } catch (SQLException ex) {
-            Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
+//    @Override
+//    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+//        PreparedStatement result = null;
+//        try {
+//            String query = "SELECT * "
+//                         + "  FROM buku "
+//                         + "WHERE judul LIKE ?";
+//            
+//            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+//            command.setString(1, "%"+((String) criteria)+"%");
+//            result = command;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mBuku.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return result;
+//    }
 }

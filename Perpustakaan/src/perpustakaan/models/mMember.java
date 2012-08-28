@@ -17,7 +17,7 @@ import perpustakaan.controllers.database.cDatabaseConnection;
  */
 public class mMember extends cDatabaseAction {
     public enum EnumJenisPengenal { ktp, sim, kartu_pelajar }
-    
+    private String _filterNama = null;
     private String _id = null;
     private String _nama = null;
     private String _alamat = null;
@@ -82,6 +82,11 @@ public class mMember extends cDatabaseAction {
         this._tglDaftar = tglDaftar;
     }
     
+    public void setFilterByNama(String filterNama) {
+        this._filterNama = filterNama;
+    }
+    
+    
     public void setNamaById(){
         try {
             String query = "SELECT * "
@@ -106,9 +111,12 @@ public class mMember extends cDatabaseAction {
         PreparedStatement result = null;
         try {
             String query = "SELECT * "
-                         + "  FROM member ";
+                         + "  FROM member "
+                         + "WHERE nama LIKE ? ";
             
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            String nama = (this._filterNama == null) ? "" : this._filterNama;
+            command.setString(1, "%"+nama+"%");
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mMember.class.getName()).log(Level.SEVERE, null, ex);
@@ -191,20 +199,20 @@ public class mMember extends cDatabaseAction {
         return CollectionOfMember;
     }
     
-    @Override
-    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
-        PreparedStatement result = null;
-        try {
-            String query = "SELECT * "
-                         + "  FROM member "
-                         + "WHERE nama LIKE ?";
-            
-            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setString(1, "%"+criteria.toString()+"%");
-            result = command;
-        } catch (SQLException ex) {
-            Logger.getLogger(mMember.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
+//    @Override
+//    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+//        PreparedStatement result = null;
+//        try {
+//            String query = "SELECT * "
+//                         + "  FROM member "
+//                         + "WHERE nama LIKE ?";
+//            
+//            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+//            command.setString(1, "%"+criteria.toString()+"%");
+//            result = command;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mMember.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return result;
+//    }
 }

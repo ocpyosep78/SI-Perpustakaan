@@ -142,19 +142,19 @@ public class mPegawai extends cDatabaseAction {
         return CollectionOfPegawai;
     }
     
-    @Override
-    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
-        PreparedStatement result = null;
-        try {
-            String query = "SELECT * "
-                         + "  FROM pegawai "
-                         + "WHERE nama LIKE ?";
-            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setString(1, "%"+((String) criteria)+"%");
-            result = command;
-        } catch (SQLException ex) {
-            Logger.getLogger(mPegawai.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
+//    @Override
+//    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+//        PreparedStatement result = null;
+//        try {
+//            String query = "SELECT * "
+//                         + "  FROM pegawai "
+//                         + "WHERE nama LIKE ?";
+//            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+//            command.setString(1, "%"+((String) criteria)+"%");
+//            result = command;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mPegawai.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return result;
+//    }
 }

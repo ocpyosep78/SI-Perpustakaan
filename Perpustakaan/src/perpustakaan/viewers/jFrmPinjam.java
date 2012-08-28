@@ -1,4 +1,4 @@
-package perpustakaan.viewer;
+package perpustakaan.viewers;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -19,9 +19,9 @@ import perpustakaan.models.mBuku;
 import perpustakaan.models.mMember;
 import perpustakaan.models.mTransaksi;
 import perpustakaan.models.mTransaksiDetil;
-import perpustakaan.viewer.pop.jFrmPopBuku;
-import perpustakaan.viewer.pop.jFrmPopMember;
-import perpustakaan.viewer.pop.jFrmPopPeminjaman;
+import perpustakaan.viewers.pop.jFrmPopBuku;
+import perpustakaan.viewers.pop.jFrmPopMember;
+import perpustakaan.viewers.pop.jFrmPopPeminjaman;
 
 /**
  *
@@ -380,7 +380,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
                 txtNoPinjam.setText(String.valueOf(_trx.GetNewTrxId()));
                 txtTglPinjam.setText(skg.toString());
                 txtTglBatas.setText(skg.toString());
-                getDetilTrx(Integer.parseInt(txtNoPinjam.getText()));
+//                getDetilTrx(Integer.parseInt(txtNoPinjam.getText()));
                 break;
             case "Save":
                 if (this.SaveRow()) {
@@ -419,7 +419,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBrowseMemberActionPerformed
 
     private void btnBrowseBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseBukuActionPerformed
-        jFrmPopBuku fPop = new jFrmPopBuku(txtKodeBuku, txtJudulBuku, txtHargaSewa);
+        jFrmPopBuku fPop = new jFrmPopBuku(txtKodeBuku, txtJudulBuku, txtHargaSewa, mBuku.EnumBukuStatus.ada);
         fPop.setVisible(true);
     }//GEN-LAST:event_btnBrowseBukuActionPerformed
 
@@ -528,7 +528,7 @@ public class jFrmPinjam extends javax.swing.JInternalFrame {
     
     private void getDetilTrx(int noPinjam) {
         mTransaksiDetil trxDet = new mTransaksiDetil(noPinjam);
-        List CollectionOfTrxDet = trxDet.FetchRowSelected(noPinjam);
+        List CollectionOfTrxDet = trxDet.FetchRows();
         ListIterator lst = CollectionOfTrxDet.listIterator();
         DefaultTableModel tblModel = (DefaultTableModel) jTabDetil.getModel();
         cUtils.ResetTableContent(tblModel);

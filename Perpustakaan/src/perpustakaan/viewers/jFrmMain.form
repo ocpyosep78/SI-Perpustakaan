@@ -79,13 +79,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pengembalian Buku"/>
               </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSep2">
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMnPembayaranDenda">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Pembayaran Denda"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMnPengembalianBukuActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

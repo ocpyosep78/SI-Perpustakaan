@@ -16,6 +16,7 @@ import perpustakaan.controllers.database.cDatabaseConnection;
  * @author ophicxs
  */
 public class mTransaksi extends cDatabaseAction {
+    private String _filterId = null;
     private int _noPeminjaman = 0;
     private Date _tglPinjam = null;
     private Date _tglBatas = null;
@@ -79,7 +80,41 @@ public class mTransaksi extends cDatabaseAction {
     public void setIdPegawai(String idPegawai) {
         this._idPegawai = idPegawai;
     }
+    
+    public void setFilterId(String filterId) {
+        this._filterId = filterId;
+    }
 
+    public void updateTglKembali(Date tglKembali){
+        try {
+            String query = "UPDATE transaksi "
+                         + "SET tgl_kembali = ? "
+                         + "WHERE no_peminjaman = ?";
+            
+            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setDate(1, tglKembali);
+            command.setInt(2, this._noPeminjaman);
+            command.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(mTransaksi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void updateDenda(int denda){
+        try {
+            String query = "UPDATE transaksi "
+                         + "SET denda = ? "
+                         + "WHERE no_peminjaman = ?";
+            
+            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setInt(1, denda);
+            command.setInt(2, this._noPeminjaman);
+            command.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(mTransaksi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public int GetNewTrxId(){
         int result = 0;
                 
@@ -127,9 +162,12 @@ public class mTransaksi extends cDatabaseAction {
         PreparedStatement result = null;
         try {
             String query = "SELECT * "
-                         + "  FROM transaksi ";
+                         + "  FROM transaksi "
+                         + "WHERE no_peminjaman LIKE ?";
             
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            String no = (this._filterId == null) ? "" : this._filterId;
+            command.setString(1, "%"+no+"%");
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mTransaksi.class.getName()).log(Level.SEVERE, null, ex);
@@ -150,6 +188,7 @@ public class mTransaksi extends cDatabaseAction {
                          + "    id_member = ?," 
                          + "    id_pegawai = ?,"
                          + "    denda = ?";
+            
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
             command.setInt(1, this.getNoPeminjaman());
             command.setDate(2, this.getTglPinjam());
@@ -189,20 +228,20 @@ public class mTransaksi extends cDatabaseAction {
         return result;
     }
     
-    @Override
-    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
-        PreparedStatement result = null;
-        try {
-            String query = "SELECT * "
-                         + "  FROM transaksi "
-                         + "WHERE no_peminjaman LIKE ?";
-            
-            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setString(1, "%"+((String) criteria)+"%");
-            result = command;
-        } catch (SQLException ex) {
-            Logger.getLogger(mTransaksi.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
+//    @Override
+//    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+//        PreparedStatement result = null;
+//        try {
+//            String query = "SELECT * "
+//                         + "  FROM transaksi "
+//                         + "WHERE no_peminjaman LIKE ?";
+//            
+//            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+//            command.setString(1, "%"+((String) criteria)+"%");
+//            result = command;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mTransaksi.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return result;
+//    }
 }

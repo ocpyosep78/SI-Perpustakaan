@@ -1,75 +1,68 @@
-package perpustakaan.viewer.pop;
+package perpustakaan.viewers.pop;
 
 import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import perpustakaan.controllers.utils.cUtils;
-import perpustakaan.models.mTransaksi;
+import perpustakaan.models.mMember;
 
 /**
  *
  * @author ophicxs
  */
-public class jFrmPopPeminjaman extends javax.swing.JFrame {
-    private JTextField _noPinjam = null;
-    private JTextField _tglPinjam = null;
-    private JTextField _tglBatas = null;
-    private JTextField _idMember = null; 
-            
-    public jFrmPopPeminjaman(JTextField noPinjam, JTextField tglPinjam, JTextField tglBatas, JTextField idMember) {
-        this._noPinjam = noPinjam;
-        this._tglPinjam = tglPinjam;
-        this._tglBatas = tglBatas;
+public class jFrmPopMember extends javax.swing.JFrame {
+    private JTextField _idMember = null;
+    private JTextField _namaMember = null;
+    
+    public jFrmPopMember(JTextField idMember, JTextField namaMember) {
         this._idMember = idMember;
-                
+        this._namaMember = namaMember;
         initComponents();
-        String[] column = new String[]{"No. Peminjaman", 
-                                       "Tgl. Pinjam", 
-                                       "Tgl. Batas", 
-                                       "Member", 
-                                       "Pegawai"};
+        String[] column = new String[]{"ID", 
+                                       "Nama", 
+                                       "Alamat", 
+                                       "Pengenal", 
+                                       "No. Pengenal", 
+                                       "No. Kontak", 
+                                       "Tgl. Daftar"};
         cUtils.TabCreateColumn(jTabResult, column);
         this.LoadRows("");
     }
     
     private void LoadRows(String criteria){
-        mTransaksi trx = new mTransaksi();
-        List CollectionOfTrx = trx.FetchRows();
-        ListIterator lst = CollectionOfTrx.listIterator();
+        mMember member = new mMember();
+        
+        member.setFilterByNama(criteria);
+        List CollectionOfMember = member.FetchRows();
+        ListIterator lst = CollectionOfMember.listIterator();
         DefaultTableModel tblModel = (DefaultTableModel) jTabResult.getModel();
         cUtils.ResetTableContent((DefaultTableModel) jTabResult.getModel());
         while (lst.hasNext()){
-            mTransaksi item = (mTransaksi) lst.next();
-            tblModel.addRow(new Object[]{item.getNoPeminjaman(),
-                                         item.getTglPinjam(),
-                                         item.getTglBatas(),
-                                         item.getIdMember(), 
-                                         item.getIdPegawai()});
+            mMember item = (mMember) lst.next();
+            tblModel.addRow(new Object[]{item.getId(),
+                                         item.getNama(),
+                                         item.getAlamat(),
+                                         item.getJenisPengenal(), 
+                                         item.getNoPengenal(),
+                                         item.getKontak(), 
+                                         item.getTglDaftar()});
         }
     }
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        txtCari = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabResult = new javax.swing.JTable();
+        txtCari = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btnCari = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cari No. Peminjaman");
+        setTitle("Cari Member");
         setAlwaysOnTop(true);
-
-        jLabel1.setText("No. Peminjaman");
-
-        btnCari.setText("Cari");
-        btnCari.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariActionPerformed(evt);
-            }
-        });
 
         jTabResult.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -86,6 +79,15 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTabResult);
 
+        jLabel1.setText("Nama Member");
+
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,7 +101,7 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
                         .addComponent(txtCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -111,7 +113,7 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
                     .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCari))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -125,10 +127,8 @@ public class jFrmPopPeminjaman extends javax.swing.JFrame {
     private void jTabResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabResultMouseClicked
         if (evt.getClickCount() == 2){
             int selected = jTabResult.convertRowIndexToModel(jTabResult.getSelectedRow());
-            this._idMember.setText(jTabResult.getModel().getValueAt(selected, 3).toString());
-            this._noPinjam.setText(jTabResult.getModel().getValueAt(selected, 0).toString());
-            this._tglPinjam.setText(jTabResult.getModel().getValueAt(selected, 1).toString());
-            this._tglBatas.setText(jTabResult.getModel().getValueAt(selected, 2).toString());
+            this._idMember.setText((String) jTabResult.getModel().getValueAt(selected, 0));
+            this._namaMember.setText((String) jTabResult.getModel().getValueAt(selected, 1));
             this.dispose();
         }
     }//GEN-LAST:event_jTabResultMouseClicked

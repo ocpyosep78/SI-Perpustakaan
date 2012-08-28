@@ -51,7 +51,7 @@ public class mTransaksiDetil extends cDatabaseAction {
     public void setNilaiSewa(int nilaiSewa) {
         this._nilaiSewa = nilaiSewa;
     }
-
+    
     public void UpdateBukuStatus(int Status){
         try {
             String query = "UPDATE buku SET `status` = ? WHERE id = ?;";
@@ -91,8 +91,10 @@ public class mTransaksiDetil extends cDatabaseAction {
         try {
             String query = "SELECT detil_transaksi.*, buku.judul "
                          + "  FROM detil_transaksi "
-                         + "INNER JOIN buku ON detil_transaksi.id_buku = buku.id";
+                         + "INNER JOIN buku ON detil_transaksi.id_buku = buku.id "
+                         + "WHERE detil_transaksi.no_peminjaman = ?";
             PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+            command.setInt(1, this._noPeminjaman);
             result = command;
         } catch (SQLException ex) {
             Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,21 +143,21 @@ public class mTransaksiDetil extends cDatabaseAction {
     }
     
     
-    @Override
-    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
-        PreparedStatement result = null;
-        try {
-            String query = "SELECT detil_transaksi.*, buku.judul "
-                         + "  FROM detil_transaksi INNER JOIN buku ON detil_transaksi.id_buku = buku.id "
-                         + "WHERE detil_transaksi.no_peminjaman = ?";
-            
-            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
-            command.setInt(1, Integer.parseInt(criteria.toString()));
-            
-            result = command;
-        } catch (SQLException ex) {
-            Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
+//    @Override
+//    protected PreparedStatement DBCommandFetchSelected(Object criteria) {
+//        PreparedStatement result = null;
+//        try {
+//            String query = "SELECT detil_transaksi.*, buku.judul "
+//                         + "  FROM detil_transaksi INNER JOIN buku ON detil_transaksi.id_buku = buku.id "
+//                         + "WHERE detil_transaksi.no_peminjaman = ?";
+//            
+//            PreparedStatement command = cDatabaseConnection.dbConn.prepareStatement(query);
+//            command.setInt(1, Integer.parseInt(criteria.toString()));
+//            
+//            result = command;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mTransaksiDetil.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return result;
+//    }
 }

@@ -1,4 +1,4 @@
-package perpustakaan.viewer;
+package perpustakaan.viewers;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

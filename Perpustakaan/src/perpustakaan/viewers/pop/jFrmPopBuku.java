@@ -1,4 +1,4 @@
-package perpustakaan.viewer.pop;
+package perpustakaan.viewers.pop;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -15,11 +15,13 @@ public class jFrmPopBuku extends javax.swing.JFrame {
     private JTextField _id = null;
     private JTextField _judul = null;
     private JTextField _hrgSewa = null;
+    private mBuku.EnumBukuStatus _state;
     
-    public jFrmPopBuku(JTextField idBuku, JTextField judulBuku, JTextField hrgSewa) {
+    public jFrmPopBuku(JTextField idBuku, JTextField judulBuku, JTextField hrgSewa, mBuku.EnumBukuStatus status) {
         this._id = idBuku;
         this._judul = judulBuku;
         this._hrgSewa = hrgSewa;
+        this._state = status;
         initComponents();
         String[] column = new String[]{"Kode Buku", 
                                        "Judul Buku", 
@@ -36,9 +38,13 @@ public class jFrmPopBuku extends javax.swing.JFrame {
 
     private void LoadRows(String criteria){
         mBuku buku = new mBuku();
-        List CollectionOfBuku = buku.FetchRowSelected(criteria);
+        
+        buku.setFilterStatus(this._state);
+        buku.setFilterByJudul(criteria);
+        List CollectionOfBuku = buku.FetchRows();
         ListIterator lst = CollectionOfBuku.listIterator();
         DefaultTableModel tblModel = (DefaultTableModel) jTabResult.getModel();
+        cUtils.ResetTableContent(tblModel);
         while (lst.hasNext()){
             mBuku item = (mBuku) lst.next();
             tblModel.addRow(new Object[]{item.getId(),

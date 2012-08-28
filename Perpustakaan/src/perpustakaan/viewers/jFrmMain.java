@@ -1,4 +1,4 @@
-package perpustakaan.viewer;
+package perpustakaan.viewers;
 
 import java.beans.PropertyVetoException;
 import java.util.logging.Level;
@@ -32,8 +32,6 @@ public class jFrmMain extends JFrame {
         mnTransaksi = new javax.swing.JMenu();
         jMnuPeminjamanBuku = new javax.swing.JMenuItem();
         jMnPengembalianBuku = new javax.swing.JMenuItem();
-        jSep2 = new javax.swing.JPopupMenu.Separator();
-        jMnPembayaranDenda = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistem Informasi Perpustakaan");
@@ -102,11 +100,12 @@ public class jFrmMain extends JFrame {
         mnTransaksi.add(jMnuPeminjamanBuku);
 
         jMnPengembalianBuku.setText("Pengembalian Buku");
+        jMnPengembalianBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnPengembalianBukuActionPerformed(evt);
+            }
+        });
         mnTransaksi.add(jMnPengembalianBuku);
-        mnTransaksi.add(jSep2);
-
-        jMnPembayaranDenda.setText("Pembayaran Denda");
-        mnTransaksi.add(jMnPembayaranDenda);
 
         jMnBar.add(mnTransaksi);
 
@@ -181,6 +180,14 @@ public class jFrmMain extends JFrame {
         }
     }//GEN-LAST:event_jMnuPeminjamanBukuActionPerformed
 
+    private void jMnPengembalianBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnPengembalianBukuActionPerformed
+        if (!this.isChildExist(jFrmKembali.class.getName())){
+            jFrmKembali fKembali = new jFrmKembali();
+            jDeskPane.add(fKembali);
+            fKembali.setVisible(true);
+        }
+    }//GEN-LAST:event_jMnPengembalianBukuActionPerformed
+
     private void closeAllChild(){
         for (int i = 0; i < jDeskPane.getAllFrames().length; i++){
             jDeskPane.getAllFrames()[i].dispose();
@@ -214,11 +221,9 @@ public class jFrmMain extends JFrame {
     private javax.swing.JMenuItem jMnLogin;
     private javax.swing.JMenuItem jMnMember;
     private javax.swing.JMenuItem jMnPegawai;
-    private javax.swing.JMenuItem jMnPembayaranDenda;
     private javax.swing.JMenuItem jMnPengembalianBuku;
     private javax.swing.JMenuItem jMnuPeminjamanBuku;
     private javax.swing.JPopupMenu.Separator jSep1;
-    private javax.swing.JPopupMenu.Separator jSep2;
     private javax.swing.JMenu mnData;
     private javax.swing.JMenu mnTransaksi;
     // End of variables declaration//GEN-END:variables
